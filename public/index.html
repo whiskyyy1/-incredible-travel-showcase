@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>100种不可思议旅行</title>
+  <style>
+    :root {
+      --bg: #faf9f7;
+      --card-bg: #ffffff;
+      --text: #2d2d2d;
+      --text-light: #666666;
+      --accent: #c9a87c;
+      --accent-dark: #a88b5e;
+      --border: #e8e4df;
+      --shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* 导航栏 */
+    nav {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav .brand {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--text);
+    }
+    nav .brand span { color: var(--accent); }
+
+    /* 筛选区 */
+    .filter-bar {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .filter-bar label {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      margin-right: 0.25rem;
+    }
+    .filter-bar select {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card-bg);
+      font-size: 0.875rem;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .filter-bar select:focus { border-color: var(--accent); }
+    .filter-bar button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card-bg);
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-bar button:hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* 卡片网格 */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 992px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 576px) { .card-grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid var(--border);
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+    }
+    .card-image {
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+      background: #eee;
+    }
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .card:hover .card-image img { transform: scale(1.05); }
+
+    .card-content { padding: 1.25rem; }
+    .card-tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.625rem;
+      border-radius: 20px;
+      background: #f3efe8;
+      color: var(--accent-dark);
+      font-weight: 500;
+    }
+    .tag.type { background: #e8f4f0; color: #4a907a; }
+    .card h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.375rem;
+      line-height: 1.4;
+    }
+    .card .location {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .card .description {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card .niche {
+      font-size: 0.8125rem;
+      color: var(--accent-dark);
+    }
+
+    /* 分页 */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2.5rem;
+      padding-bottom: 2rem;
+    }
+    .pagination button {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card-bg);
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+    .pagination button:hover:not(:disabled) {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .pagination button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .pagination .page-info {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      padding: 0 0.75rem;
+    }
+
+    /* 状态提示 */
+    .state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-light);
+    }
+    .state .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <div class="brand">100种<span>不可思议</span>旅行</div>
+    </div>
+  </nav>
+
+  <div class="filter-bar">
+    <div>
+      <label for="filterType">体验类型</label>
+      <select id="filterType">
+        <option value="">全部</option>
+        <option value="自然奇观">自然奇观</option>
+        <option value="人文探险">人文探险</option>
+        <option value="美食体验">美食体验</option>
+        <option value="极限运动">极限运动</option>
+        <option value="艺术巡礼">艺术巡礼</option>
+        <option value="星空露营">星空露营</option>
+        <option value="山居度假">山居度假</option>
+      </select>
+    </div>
+    <div>
+      <label for="filterNiche">小众程度</label>
+      <select id="filterNiche">
+        <option value="">全部</option>
+        <option value="1">1星 - 相对知名</option>
+        <option value="2">2星 - 小众</option>
+        <option value="3">3星 - 很小众</option>
+        <option value="4">4星 - 极小众</option>
+        <option value="5">5星 - 极少人知</option>
+      </select>
+    </div>
+    <button id="resetBtn">重置筛选</button>
+  </div>
+
+  <div class="container">
+    <div id="state" class="state">
+      <div class="spinner"></div>
+      <p>正在发现不可思议的旅行...</p>
+    </div>
+    <div id="cardGrid" class="card-grid" style="display:none;"></div>
+    <div id="pagination" class="pagination" style="display:none;"></div>
+  </div>
+
+  <script>
+    // 当前分页与筛选状态
+    let currentPage = 1;
+    let currentType = '';
+    let currentNiche = '';
+
+    const stateEl = document.getElementById('state');
+    const gridEl = document.getElementById('cardGrid');
+    const paginationEl = document.getElementById('pagination');
+    const filterType = document.getElementById('filterType');
+    const filterNiche = document.getElementById('filterNiche');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // 绑定筛选事件
+    filterType.addEventListener('change', () => {
+      currentType = filterType.value;
+      currentPage = 1;
+      loadTravels();
+    });
+    filterNiche.addEventListener('change', () => {
+      currentNiche = filterNiche.value;
+      currentPage = 1;
+      loadTravels();
+    });
+    resetBtn.addEventListener('click', () => {
+      filterType.value = '';
+      filterNiche.value = '';
+      currentType = '';
+      currentNiche = '';
+      currentPage = 1;
+      loadTravels();
+    });
+
+    // 加载旅行列表数据
+    async function loadTravels() {
+      stateEl.style.display = 'block';
+      gridEl.style.display = 'none';
+      paginationEl.style.display = 'none';
+
+      try {
+        const params = new URLSearchParams();
+        params.set('page', currentPage);
+        params.set('limit', 9);
+        if (currentType) params.set('experience_type', currentType);
+        if (currentNiche) params.set('niche_level', currentNiche);
+
+        const res = await fetch('/api/travels?' + params.toString());
+        if (!res.ok) throw new Error('请求失败');
+        const result = await res.json();
+
+        renderCards(result.data);
+        renderPagination(result.meta);
+      } catch (err) {
+        stateEl.innerHTML = `<p style="color:#c0392b;">加载失败：${err.message}</p>`;
+      }
+    }
+
+    // 渲染卡片网格
+    function renderCards(travels) {
+      if (!travels || travels.length === 0) {
+        stateEl.innerHTML = '<p>没有找到符合条件的旅行体验</p>';
+        stateEl.style.display = 'block';
+        gridEl.style.display = 'none';
+        return;
+      }
+
+      stateEl.style.display = 'none';
+      gridEl.style.display = 'grid';
+      gridEl.innerHTML = '';
+
+      travels.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.onclick = () => window.location.href = `/detail.html?id=${t.id}`;
+
+        const stars = '★'.repeat(t.niche_level) + '<span style="color:#ddd">' + '★'.repeat(5 - t.niche_level) + '</span>';
+
+        card.innerHTML = `
+          <div class="card-image">
+            <img src="${t.cover_image}" alt="${t.title}" loading="lazy">
+          </div>
+          <div class="card-content">
+            <div class="card-tags">
+              <span class="tag type">${t.experience_type}</span>
+              <span class="tag">${t.visual_style}</span>
+            </div>
+            <h3>${t.title}</h3>
+            <div class="location">📍 ${t.location}</div>
+            <div class="description">${t.description}</div>
+            <div class="niche">小众程度 ${stars}</div>
+          </div>
+        `;
+        gridEl.appendChild(card);
+      });
+    }
+
+    // 渲染分页控件
+    function renderPagination(meta) {
+      if (!meta || meta.pages <= 1) {
+        paginationEl.style.display = 'none';
+        return;
+      }
+      paginationEl.style.display = 'flex';
+      paginationEl.innerHTML = '';
+
+      const prevBtn = document.createElement('button');
+      prevBtn.textContent = '← 上一页';
+      prevBtn.disabled = meta.page <= 1;
+      prevBtn.onclick = () => { currentPage--; loadTravels(); };
+
+      const info = document.createElement('span');
+      info.className = 'page-info';
+      info.textContent = `${meta.page} / ${meta.pages}`;
+
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = '下一页 →';
+      nextBtn.disabled = meta.page >= meta.pages;
+      nextBtn.onclick = () => { currentPage++; loadTravels(); };
+
+      paginationEl.appendChild(prevBtn);
+      paginationEl.appendChild(info);
+      paginationEl.appendChild(nextBtn);
+    }
+
+    // 初始化加载
+    loadTravels();
+  </script>
+</body>
+</html>
